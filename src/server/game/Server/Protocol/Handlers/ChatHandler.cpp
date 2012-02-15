@@ -376,9 +376,9 @@ _player->ToggleDND();
 			if (!normalizePlayerName(to))
 			{
                 // If Fake WHO List system on then show player DND
-                if (sWorld.getConfig(CONFIG_BOOL_FAKE_WHO_LIST))
+                if (sWorld->getBoolConfig(CONFIG_FAKE_WHO_LIST))
                 {
-                    sWorld.SendWorldText(LANG_NOT_WHISPER);
+                    sWorld->SendWorldText(LANG_NOT_WHISPER);
                     return;
                 }
                 else
