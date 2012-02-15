@@ -358,8 +358,7 @@ public:
 		}
 
 		void sQuestReward(Player *player, const Quest *pQuest, uint32 data) {
-			if (pQuest->GetQuestId() == QUEST_LOCKDOWN
-					&& player->GetPhaseMask() == 1)
+			if (pQuest->GetQuestId() == QUEST_LOCKDOWN && player->GetPhaseMask() == 1)
 				player->SetAuraStack(SPELL_PHASE_2, player, 1); //phaseshift
 		}
 	};

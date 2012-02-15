@@ -29,7 +29,7 @@
 #include "Define.h"
 #include "revision.h"
 
-#define _PACKAGENAME "ArkCORE"
+#define _PACKAGENAME "ZarCore"
 #define _CODENAME "COLD_DAY_IN_HELL"
 
 #if ARKCORE_ENDIAN == ARKCORE_BIGENDIAN
@@ -44,7 +44,7 @@
 # ifdef _WIN64
 #  define _FULLVERSION _PACKAGENAME " rev. " VER_PRODUCTVERSION_STR " (Win64, "_BUILD_DIRECTIVE ")"
 # else
-#  define _FULLVERSION _PACKAGENAME " rev. ZarCore 007 " VER_PRODUCTVERSION_STR " (Win32, " _BUILD_DIRECTIVE ")"
+#  define _FULLVERSION _PACKAGENAME " rev. 007 " VER_PRODUCTVERSION_STR " (Win32, " _BUILD_DIRECTIVE ")"
 # endif
 #else
 #  define _FULLVERSION _PACKAGENAME " rev. " VER_PRODUCTVERSION_STR " (Unix, " _BUILD_DIRECTIVE ")"
