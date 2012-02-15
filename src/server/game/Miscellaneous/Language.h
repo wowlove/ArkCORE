@@ -999,8 +999,8 @@ enum ArkCoreStrings {
 	LANG_GOINFO_NAME = 5027,
 	LANG_GOINFO_LOOTID = 5028,
 	LANG_COMMAND_LOOKUP_MAX_RESULTS = 5029,
-    LANG_NOT_WHISPER                    = 5030,
-	 // Room for more ArkCORE strings      5031-9999
+    LANG_NOT_WHISPER = 5031,
+	// Room for more ArkCORE strings      5032-9999
 
 	// Level requirement notifications
 	LANG_SAY_REQ = 6604,
