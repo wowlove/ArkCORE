@@ -17,130 +17,7 @@
 
 #include "ScriptPCH.h"
 #include "Unit.h"
-
-//Phase 1
-enum eGilneasCityPhase1
-{
-    //Quests
-    QUEST_LOCKDOWN                                     = 14078,
-
-    //Spells
-    SPELL_PHASE_2                                      = 59073,
-
-    //Say
-    SAY_PRINCE_LIAM_GREYMANE_1                         = -1638000,
-    SAY_PRINCE_LIAM_GREYMANE_2                         = -1638001,
-    SAY_PRINCE_LIAM_GREYMANE_3                         = -1638002,
-    DELAY_SAY_PRINCE_LIAM_GREYMANE                     = 20000, //20 seconds repetition time
-
-    SAY_PANICKED_CITIZEN_1                             = -1638016,
-    SAY_PANICKED_CITIZEN_2                             = -1638017,
-    SAY_PANICKED_CITIZEN_3                             = -1638018,
-    SAY_PANICKED_CITIZEN_4                             = -1638019,
-
-    SAY_GILNEAS_CITY_GUARD_GATE_1                      = -1638022,
-    SAY_GILNEAS_CITY_GUARD_GATE_2                      = -1638023,
-    SAY_GILNEAS_CITY_GUARD_GATE_3                      = -1638024,
-};
-
-#define DELAY_EMOTE_PANICKED_CITIZEN urand(5000, 15000) //5-15 second time
-#define DELAY_SAY_PANICKED_CITIZEN urand(30000, 120000) //30sec - 1.5min
-#define DELAY_SAY_GILNEAS_CITY_GUARD_GATE urand(30000, 120000) //30sec - 1.5min
-
-//Phase 2
-enum eGilneasCityPhase2
-{
-    //Sounds
-    SOUND_SWORD_FLESH                                 = 143,
-    SOUND_SWORD_PLATE                                 = 147,
-    DELAY_SOUND                                       = 500,
-    DELAY_ANIMATE                                     = 2000,
-
-    //Spells
-    SPELL_PHASE_4                                     = 59074,
-
-    //NPCs
-    NPC_PRINCE_LIAM_GREYMANE                          = 34913,
-    NPC_GILNEAS_CITY_GUARD                            = 34916,
-    NPC_RAMPAGING_WORGEN_1                            = 34884,
-    NPC_RAMPAGING_WORGEN_2                            = 35660,
-    NPC_FRIGHTENED_CITIZEN_1                          = 34981,
-    NPC_FRIGHTENED_CITIZEN_2                          = 35836,
-
-    //Say
-    YELL_PRINCE_LIAM_GREYMANE_1                       = -1638025,
-    YELL_PRINCE_LIAM_GREYMANE_2                       = -1638026,
-    YELL_PRINCE_LIAM_GREYMANE_3                       = -1638027,
-    YELL_PRINCE_LIAM_GREYMANE_4                       = -1638028,
-    YELL_PRINCE_LIAM_GREYMANE_5                       = -1638029,
-    DELAY_YELL_PRINCE_LIAM_GREYMANE                   = 2000,
-};
-
-/*######
-## npc_prince_liam_greymane_phase1
-######*/
-
-class npc_prince_liam_greymane_phase1 : public CreatureScript
-{
-public:
-    npc_prince_liam_greymane_phase1() : CreatureScript("npc_prince_liam_greymane_phase1") { }
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_prince_liam_greymane_phase1AI (creature);
-    }
-
-    struct npc_prince_liam_greymane_phase1AI : public ScriptedAI
-    {
-        npc_prince_liam_greymane_phase1AI(Creature* creature) : ScriptedAI(creature) {}
-
-        uint32 tSay; //Time left for say
-        uint32 cSay; //Current Say
-
-        //Evade or Respawn
-        void Reset()
-        {
-            tSay = DELAY_SAY_PRINCE_LIAM_GREYMANE; //Reset timer
-            cSay = 1; //Start from 1
-        }
-
-        //Timed events
-        void UpdateAI(const uint32 diff)
-        {
-            //Out of combat
-            if (!me->getVictim())
-            {
-                //Timed say
-                if (tSay <= diff)
-                {
-                    switch (cSay)
-                    {
-                        default:
-                        case 1:
-                            DoScriptText(SAY_PRINCE_LIAM_GREYMANE_1, me);
-                            cSay++;
-                            break;
-                        case 2:
-                            DoScriptText(SAY_PRINCE_LIAM_GREYMANE_2, me);
-                            cSay++;
-                            break;
-                        case 3:
-                            DoScriptText(SAY_PRINCE_LIAM_GREYMANE_3, me);
-                            cSay = 1; //Reset to 1
-                            break;
-                    }
-
-                    tSay = DELAY_SAY_PRINCE_LIAM_GREYMANE; //Reset the timer
-                }
-                else
-                {
-                    tSay -= diff;
-                }
-                return;
-            }
-        }
-    };
-};
+#include "gilneas.h"
 
 /*######
 ## npc_panicked_citizen
@@ -237,8 +114,6 @@ public:
 /*######
 ## npc_panicked_citizen_2
 ######*/
-
-#define PATHS_COUNT_PANICKED_CITIZEN      8
 
 struct Waypoint
 {
@@ -372,60 +247,6 @@ public:
     };
 };
 
-/*######
-## npc_gilneas_city_guard_phase1
-######*/
-
-class npc_gilneas_city_guard_phase1 : public CreatureScript
-{
-public:
-    npc_gilneas_city_guard_phase1() : CreatureScript("npc_gilneas_city_guard_phase1") {}
-
-    CreatureAI* GetAI(Creature* creature) const
-    {
-        return new npc_gilneas_city_guard_phase1AI (creature);
-    }
-
-    struct npc_gilneas_city_guard_phase1AI : public ScriptedAI
-    {
-        npc_gilneas_city_guard_phase1AI(Creature* creature) : ScriptedAI(creature) {}
-
-        uint32 tSay; //Time left for say
-
-        //Evade or Respawn
-        void Reset()
-        {
-            if (me->GetGUIDLow() == 3486400)
-            {
-                tSay = DELAY_SAY_GILNEAS_CITY_GUARD_GATE; //Reset timer
-            }
-        }
-
-        void UpdateAI(const uint32 diff)
-        {
-            //Out of combat and
-            if (me->GetGUIDLow() == 3486400)
-            {
-                //Timed say
-                if (tSay <= diff)
-                {
-                    //Random say
-                    DoScriptText(RAND(
-                        SAY_GILNEAS_CITY_GUARD_GATE_1,
-                        SAY_GILNEAS_CITY_GUARD_GATE_2,
-                        SAY_GILNEAS_CITY_GUARD_GATE_3),
-                    me);
-
-                    tSay = DELAY_SAY_GILNEAS_CITY_GUARD_GATE; //Reset timer
-                }
-                else
-                {
-                    tSay -= diff;
-                }
-            }
-        }
-    };
-};
 
 /*######
 ## npc_gilneas_city_guard_phase2
@@ -663,13 +484,6 @@ public:
 ## npc_rampaging_worgen
 ######*/
 
-enum eRampaging_worgen
-{
-    SPELL_ENRAGE    = 8599
-};
-
-#define CD_ENRAGE      30000
-
 class npc_rampaging_worgen : public CreatureScript
 {
 public:
@@ -831,13 +645,6 @@ public:
 ## go_merchant_square_door
 ######*/
 
-enum eMerchant_square_door
-{
-    QUEST_EVAC_MERC_SQUA      = 14098
-};
-
-#define SUMMON1_TTL       300000
-
 class go_merchant_square_door : public GameObjectScript
 {
 public:
@@ -914,25 +721,6 @@ public:
 /*######
 ## npc_frightened_citizen
 ######*/
-
-enum eFrightened_citizen
-{
-    SAY_CITIZEN_1                = -1638003,
-    SAY_CITIZEN_2                = -1638004,
-    SAY_CITIZEN_3                = -1638005,
-    SAY_CITIZEN_4                = -1638006,
-    SAY_CITIZEN_5                = -1638007,
-    SAY_CITIZEN_6                = -1638008,
-    SAY_CITIZEN_7                = -1638009,
-    SAY_CITIZEN_8                = -1638010,
-    SAY_CITIZEN_1b               = -1638011,
-    SAY_CITIZEN_2b               = -1638012,
-    SAY_CITIZEN_3b               = -1638013,
-    SAY_CITIZEN_4b               = -1638014,
-    SAY_CITIZEN_5b               = -1638015,
-};
-
-#define PATHS_COUNT  2
 
 struct Point
 {
@@ -1384,9 +1172,7 @@ class spell_keg_placed : public SpellScriptLoader
 
 void AddSC_gilneas()
 {
-    new npc_gilneas_city_guard_phase1();
     new npc_gilneas_city_guard_phase2();
-    new npc_prince_liam_greymane_phase1();
     new npc_prince_liam_greymane_phase2();
     new npc_rampaging_worgen();
     new npc_rampaging_worgen2();
