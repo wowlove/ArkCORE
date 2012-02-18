@@ -78,6 +78,7 @@
 #include "CreatureTextMgr.h"
 #include "SmartAI.h"
 #include "Channel.h"
+#include "AnticheatMgr.h"
 
 #include "OutdoorPvPWG.h"
 
@@ -1252,7 +1253,11 @@ void World::LoadConfigSettings(bool reload)
 	
 	// Area DuelReset
     m_int_configs[CONFIG_DUEL_RESET_ONE] = sConfig->GetIntDefault("Duel.Reset.Area.One", 1);
-    m_int_configs[CONFIG_DUEL_RESET_TWO] = sConfig->GetIntDefault("Duel.Reset.Area.Two", 616);	
+    m_int_configs[CONFIG_DUEL_RESET_TWO] = sConfig->GetIntDefault("Duel.Reset.Area.Two", 616);
+    m_bool_configs[CONFIG_ANTICHEAT_ENABLE] = sConfig->GetBoolDefault("Anticheat.Enable", true);
+    m_int_configs[CONFIG_ANTICHEAT_REPORTS_INGAME_NOTIFICATION] = sConfig->GetIntDefault("Anticheat.ReportsForIngameWarnings", 70);
+    m_int_configs[CONFIG_ANTICHEAT_DETECTIONS_ENABLED] = sConfig->GetIntDefault("Anticheat.DetectionsEnabled",31);
+    m_int_configs[CONFIG_ANTICHEAT_MAX_REPORTS_FOR_DAILY_REPORT] = sConfig->GetIntDefault("Anticheat.MaxReportsForDailyReport",70);
 	
     sScriptMgr->OnConfigLoad(reload);
 }
@@ -2759,6 +2764,8 @@ void World::ResetDailyQuests()
 
     // change available dailies
     sPoolMgr->ChangeDailyQuests();
+
+    sAnticheatMgr->ResetDailyReportStates();	
 }
 
 void World::LoadDBAllowedSecurityLevel()

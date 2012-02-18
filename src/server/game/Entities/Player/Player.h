@@ -1089,6 +1089,8 @@ public:
 	explicit Player(WorldSession *session);
 	~Player();
 
+        //AnticheatData anticheatData;	
+
 	void CleanupsBeforeDelete(bool finalCleanup = true);
 
 	static UpdateMask updateVisualBits;

@@ -183,7 +183,7 @@ void WorldSession::HandleWhoOpcode(WorldPacket & recv_data) {
 	sLog->outDebug(LOG_FILTER_NETWORKIO, "WORLD: Recvd CMSG_WHO Message");
 	//recv_data.hexlike();
 
-			uint32 matchcount = 49;
+			uint32 matchcount = 0;
 
 			uint32 level_min, level_max, racemask, classmask, zones_count, str_count;
 	uint32 zoneids[10]; // 10 is client limit

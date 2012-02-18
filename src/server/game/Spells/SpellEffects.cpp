@@ -21,6 +21,7 @@
  */
 
 #include "gamePCH.h"
+#include "AnticheatMgr.h" 
 #include "Common.h"
 #include "DatabaseEnv.h"
 #include "WorldPacket.h"
